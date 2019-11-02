@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -24,6 +25,7 @@ class _ClipState extends State<Clip> {
       Navigator.pop(context);
     }
     connect(widget.clipname, widget.password);
+    Timer(Duration(milliseconds: 1000), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
     return Scaffold(
       appBar: AppBar(
         title: Text('网络剪切板'),
@@ -42,7 +44,6 @@ class _ClipState extends State<Clip> {
       ),
       body: ListView(
         controller: _scrollController,
-        reverse: true,
         padding: const EdgeInsets.only(bottom: 20.0),
         children: generateWidget(),
       ),
@@ -95,7 +96,6 @@ class _ClipState extends State<Clip> {
         _messages = data['data'];
       });
     } else if (data['type'] == 'single') {
-      print('receive: $msg');
       setState(() {
         _messages.add(data['data']);
       });
@@ -138,11 +138,11 @@ class _SendBoxState extends State<SendBox> {
                   labelText: '要发送的内容',
                 ),
                 onChanged: (String msg) {
-                  this._msg = msg;
+                  _msg = msg;
                 },
                 onSubmitted: (String msg) {
-                  this.send(msg);
-                  // Navigator.pop(context);
+                  send(msg);
+                  Navigator.pop(context);
                 },
               )
             ),
@@ -150,9 +150,8 @@ class _SendBoxState extends State<SendBox> {
               padding: EdgeInsets.only(top: 40.0),
               child: RaisedButton(
                 onPressed: () {
-                  print('send: $_msg');
                   send(_msg);
-                  // Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 colorBrightness: Brightness.light,
                 textTheme: ButtonTextTheme.primary,
@@ -169,7 +168,7 @@ class _SendBoxState extends State<SendBox> {
   }
 
   void send(msg) {
-    Map m = {"type": "single", "msg": msg};
+    Map m = {"type": "message", "msg": msg};
     widget.channel.sink.add(jsonEncode(m));
   }
 }
