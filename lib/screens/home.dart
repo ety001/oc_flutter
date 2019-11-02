@@ -79,7 +79,6 @@ class _LoginFormState extends State<LoginForm> {
           padding: EdgeInsets.only(top: 50.0),
           child: RaisedButton(
             onPressed: () {
-              print('test:' + _clipname + _password);
               if (_clipname != '' && _password != '') {
                 Navigator.push(
                   context,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -32,7 +33,7 @@ class _ClipState extends State<Clip> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.send),
-            tooltip: 'Show Snackbar',
+            tooltip: '发送',
             onPressed: () {
               Navigator.push(
                 context,
@@ -67,24 +68,7 @@ class _ClipState extends State<Clip> {
     }
     List<Widget> _msgList = [];
     _messages.forEach((msg) {
-      _msgList.add(
-        GestureDetector(
-          onTap: () {
-            print('tap: $msg');
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-            padding: EdgeInsets.all(10.0),
-            color: const Color.fromRGBO(0, 168, 232, 1.0),
-            child: Text(
-              msg,
-              style: TextStyle(
-                color: Colors.white70,
-              ),
-            ),
-          ),
-        )
-      );
+      _msgList.add(MsgItem(msg: msg));
     });
     return _msgList;
   }
@@ -106,6 +90,37 @@ class _ClipState extends State<Clip> {
   void dispose() {
     super.dispose();
     _channel.sink.close();
+  }
+}
+
+class MsgItem extends StatelessWidget {
+  MsgItem({Key key, @required this.msg}) : super(key: key);
+  final String msg;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        ClipboardManager.copyToClipBoard(msg).then((result) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('已复制到剪切板')
+            )
+          );
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+        padding: EdgeInsets.all(10.0),
+        color: const Color.fromRGBO(0, 168, 232, 1.0),
+        child: Text(
+          msg,
+          style: TextStyle(
+            color: Colors.white70,
+          ),
+        ),
+      ),
+    );
   }
 }
 
