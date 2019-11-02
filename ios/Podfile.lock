@@ -1,0 +1,22 @@
+PODS:
+  - clipboard_manager (0.0.3):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - clipboard_manager (from `.symlinks/plugins/clipboard_manager/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
+
+EXTERNAL SOURCES:
+  clipboard_manager:
+    :path: ".symlinks/plugins/clipboard_manager/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios-release"
+
+SPEC CHECKSUMS:
+  clipboard_manager: f4800834e62cc26b1cc4e0a92a35cd452dd8b827
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+
+COCOAPODS: 1.8.4
