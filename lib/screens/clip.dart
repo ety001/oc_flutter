@@ -16,6 +16,7 @@ class Clip extends StatefulWidget {
 class _ClipState extends State<Clip> {
   WebSocketChannel _channel;
   List _messages;
+  ScrollController _scrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,8 @@ class _ClipState extends State<Clip> {
         ],
       ),
       body: ListView(
+        controller: _scrollController,
+        reverse: true,
         padding: const EdgeInsets.only(bottom: 20.0),
         children: generateWidget(),
       ),
@@ -66,7 +69,7 @@ class _ClipState extends State<Clip> {
       _msgList.add(
         GestureDetector(
           onTap: () {
-            print('tap');
+            print('tap: $msg');
           },
           child: Container(
             margin: EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
