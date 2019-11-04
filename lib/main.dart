@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:oc_flutter/common/theme.dart';
-import 'package:oc_flutter/screens/clip.dart';
-import 'package:oc_flutter/screens/home.dart';
+// import 'package:online_clipboard/common/theme.dart';
+import 'package:online_clipboard/screens/clip.dart';
+import 'package:online_clipboard/screens/home.dart';
 
 void main() {
   runApp(MyApp());

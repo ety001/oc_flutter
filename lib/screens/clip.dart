@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -32,7 +33,7 @@ class _ClipState extends State<Clip> {
         title: Text('网络剪切板'),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.add_comment),
             tooltip: '发送',
             onPressed: () {
               Navigator.push(
@@ -99,9 +100,11 @@ class MsgItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var unescape = new HtmlUnescape();
+    var unescapeMsg = unescape.convert(msg);
     return GestureDetector(
       onTap: () {
-        ClipboardManager.copyToClipBoard(msg).then((result) {
+        ClipboardManager.copyToClipBoard(unescapeMsg).then((result) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text('已复制到剪切板')
@@ -114,7 +117,7 @@ class MsgItem extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         color: const Color.fromRGBO(0, 168, 232, 1.0),
         child: Text(
-          msg,
+          unescapeMsg,
           style: TextStyle(
             color: Colors.white70,
           ),
@@ -140,6 +143,16 @@ class _SendBoxState extends State<SendBox> {
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.send),
+            tooltip: '发送',
+            onPressed: () {
+              send(_msg);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -161,21 +174,6 @@ class _SendBoxState extends State<SendBox> {
                 },
               )
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 40.0),
-              child: RaisedButton(
-                onPressed: () {
-                  send(_msg);
-                  Navigator.pop(context);
-                },
-                colorBrightness: Brightness.light,
-                textTheme: ButtonTextTheme.primary,
-                child: const Text(
-                  '发送',
-                  style: TextStyle(fontSize: 20)
-                ),
-              ),
-            )
           ]
         ),
       )

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oc_flutter/screens/clip.dart';
+import 'package:online_clipboard/screens/clip.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -27,12 +27,13 @@ class Home extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 40.0),
                 child:   Text(
-                  'PC版: https://oc.to0l.cn',
+                  '网页版: https://oc.to0l.cn',
                   style: TextStyle(
                     fontSize: 14,
                   ),
                 ),
               ),
+              Text('v1.1.0'),
             ],
           ),
         ),
@@ -51,6 +52,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   String _clipname = '';
   String _password = '';
+  final FocusNode _clipnameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +62,8 @@ class _LoginFormState extends State<LoginForm> {
         Padding(
           padding: EdgeInsets.only(top: 30.0, left: 40.0, right: 40.0),
           child: TextField(
+            focusNode: _clipnameFocus,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: '剪切板名称',
             ),
@@ -67,12 +72,15 @@ class _LoginFormState extends State<LoginForm> {
             },
             onSubmitted: (String clipname) {
               _clipname = clipname;
+              _clipnameFocus.unfocus();
+              FocusScope.of(context).requestFocus(_passwordFocus);
             },
           )
         ),
         Padding(
           padding: EdgeInsets.only(top: 30.0, left: 40.0, right: 40.0),
           child: TextField(
+            focusNode: _passwordFocus,
             obscureText: true,
             decoration: InputDecoration(
               labelText: '剪切板密码',
@@ -82,6 +90,7 @@ class _LoginFormState extends State<LoginForm> {
             },
             onSubmitted: (String password) {
               _password = password;
+              getIn();
             },
           )
         ),
@@ -89,17 +98,7 @@ class _LoginFormState extends State<LoginForm> {
           padding: EdgeInsets.only(top: 50.0),
           child: RaisedButton(
             onPressed: () {
-              if (_clipname != '' && _password != '') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Clip(
-                      clipname: _clipname,
-                      password: _password,
-                    )
-                  )
-                );
-              }
+              getIn();
             },
             colorBrightness: Brightness.light,
             textTheme: ButtonTextTheme.primary,
@@ -111,5 +110,19 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ],
     );
+  }
+
+  void getIn() {
+    if (_clipname != '' && _password != '') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Clip(
+            clipname: _clipname,
+            password: _password,
+          )
+        )
+      );
+    }
   }
 }
