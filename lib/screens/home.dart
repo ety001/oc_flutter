@@ -21,7 +21,8 @@ class Home extends StatelessWidget {
                 ),
               ),
               Text('多终端同步文字信息, 最多50条'),
-              Text('输入剪切板名称: public，密码: public，可以进行留言'),
+              Text('输入剪切板名称: public，密码: public'),
+              Text('可以进行留言'),
               LoginForm(),
               Padding(
                 padding: EdgeInsets.only(top: 40.0),
